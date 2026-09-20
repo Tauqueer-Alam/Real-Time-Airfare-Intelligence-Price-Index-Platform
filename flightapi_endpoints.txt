@@ -1,0 +1,23 @@
+=== 400 /schedule/<KEY>?departureDate=2026-09-18&airport1=DEL&airport2=BLR&currency=INR&mode=departure
+{"message":"Something went wrong, please try again","success":false}
+
+=== 400 /schedule/<KEY>?departureDate=2026-09-18&airport1=DEL&airport2=BLR&currency=INR&mode=arrival
+{"message":"Something went wrong, please try again","success":false}
+
+=== 400 /schedule/<KEY>?departureDate=2026-09-18&airport1=DEL&airport2=BLR&currency=INR&mode=schedule
+{"message":"Something went wrong, please try again","success":false}
+
+=== 400 /schedule/<KEY>?departureDate=2026-09-18&airport1=DEL&airport2=BLR&currency=INR&mode=oneway
+{"message":"Something went wrong, please try again","success":false}
+
+=== 400 /schedule/<KEY>?departureDate=2026-09-18&airport1=DEL&airport2=BLR&currency=INR&mode=roundtrip
+{"message":"Something went wrong, please try again","success":false}
+
+=== 400 /schedule/<KEY>?departureDate=2026-09-18&airport1=DEL&airport2=BLR&currency=INR&mode=multi
+{"message":"Something went wrong, please try again","success":false}
+
+=== 400 /schedule/<KEY>?departureDate=2026-09-18&airport1=DEL&airport2=BLR&currency=INR&mode=all
+{"message":"Something went wrong, please try again","success":false}
+
+=== 400 /schedule/<KEY>?departureDate=2026-09-18&airport1=DEL&airport2=BLR&currency=INR&mode=both
+{"message":"Something went wrong, please try again","success":false}

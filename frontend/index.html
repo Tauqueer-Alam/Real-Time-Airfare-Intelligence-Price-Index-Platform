@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Airfare Intelligence Dashboard</title>
+  <link rel="stylesheet" href="/assets/styles.css?v=5">
+</head>
+<body>
+  <main class="app-shell">
+    <section class="search-panel" aria-labelledby="page-title">
+      <div class="brand-row">
+        <div>
+          <p class="eyebrow">Real-Time Airfare Intelligence</p>
+          <h1 id="page-title">Flight Search</h1>
+        </div>
+        <span class="status-pill">Live API</span>
+      </div>
+
+      <form id="flight-search-form" class="search-form">
+        <div class="autocomplete-field">
+          <label for="source">
+            Source airport
+            <input
+              id="source"
+              name="source"
+              type="text"
+              autocomplete="off"
+              placeholder="DEL"
+              maxlength="10"
+              required
+            >
+          </label>
+          <div id="source-suggestions" class="suggestions" hidden></div>
+        </div>
+
+        <div class="autocomplete-field">
+          <label for="destination">
+            Destination airport
+            <input
+              id="destination"
+              name="destination"
+              type="text"
+              autocomplete="off"
+              placeholder="BLR"
+              maxlength="10"
+              required
+            >
+          </label>
+          <div id="destination-suggestions" class="suggestions" hidden></div>
+        </div>
+
+        <button id="search-button" type="submit">
+          Search flights
+        </button>
+      </form>
+
+      <div id="message" class="message" role="status" aria-live="polite"></div>
+      <p class="data-source" id="current-data-source">Current fares: FlightAPI.io</p>
+    </section>
+
+    <section class="analytics-panel" aria-labelledby="analytics-title">
+      <div class="results-header">
+        <div>
+          <p class="eyebrow">Analytics</p>
+          <h2 id="analytics-title">Route intelligence</h2>
+        </div>
+        <p id="analytics-status" class="result-count">Waiting for search</p>
+      </div>
+
+      <div class="metric-grid">
+        <article class="metric-card">
+          <span>Current average fare</span>
+          <strong id="average-fare">-</strong>
+        </article>
+        <article class="metric-card">
+          <span>30-day baseline</span>
+          <strong id="baseline-fare">-</strong>
+        </article>
+        <article class="metric-card">
+          <span>Airfare Price Index</span>
+          <strong id="price-index">-</strong>
+        </article>
+        <article class="metric-card">
+          <span>Percentage change</span>
+          <strong id="percentage-change">-</strong>
+        </article>
+        <article class="metric-card">
+          <span>Cheapest flight</span>
+          <strong id="cheapest-flight">-</strong>
+        </article>
+        <article class="metric-card">
+          <span>Most expensive flight</span>
+          <strong id="expensive-flight">-</strong>
+        </article>
+      </div>
+
+      <div class="analytics-grid">
+        <div class="chart-panel">
+          <div class="subsection-header">
+            <h3>Historical price chart</h3>
+            <span id="history-count">No data</span>
+          </div>
+          <p class="data-source" id="history-source">Historical data: No data</p>
+          <canvas id="price-history-chart" width="720" height="320"></canvas>
+        </div>
+
+        <div class="comparison-panel">
+          <div class="subsection-header">
+            <h3>Airline comparison</h3>
+            <span>Average fare</span>
+          </div>
+          <div id="airline-comparison" class="comparison-list">
+            <p class="muted-note">Search a route to compare airlines.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="results-panel" aria-labelledby="results-title">
+      <div class="results-header">
+        <div>
+          <p class="eyebrow">Results</p>
+          <h2 id="results-title">Available fares</h2>
+        </div>
+        <p id="result-count" class="result-count">No search yet</p>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Airline</th>
+              <th>Route</th>
+              <th>Departure</th>
+              <th class="price-column">Price</th>
+            </tr>
+          </thead>
+          <tbody id="flights-table-body">
+            <tr class="empty-row">
+              <td colspan="4">Search by source and destination to view fares.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/assets/app.js?v=5"></script>
+</body>
+</html>

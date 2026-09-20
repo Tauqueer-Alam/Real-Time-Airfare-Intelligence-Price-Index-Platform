@@ -1,0 +1,48 @@
+"""Probe /airline and /schedule with path-based variants + near dates."""
+import urllib.request
+import urllib.error
+
+API_KEY = "6aaaf19a703b0cec8ded2156"
+
+
+def call(url):
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            return resp.status, resp.read().decode()[:4000]
+    except urllib.error.HTTPError as e:
+        return e.code, e.read().decode(errors="ignore")[:400]
+    except Exception as e:
+        return -1, repr(e)
+
+
+probes = [
+    # airline: path-based with airline_id, date, number
+    f"https://api.flightapi.io/airline/{API_KEY}/AA/2026-09-18/100",
+    f"https://api.flightapi.io/airline/{API_KEY}/6E/2026-09-18/234",
+    f"https://api.flightapi.io/airline/{API_KEY}/AI/2026-09-18/9722",
+    # schedule: path-based with airport1, airport2, date
+    f"https://api.flightapi.io/schedule/{API_KEY}/DEL/BLR/2026-09-18",
+    f"https://api.flightapi.io/schedule/{API_KEY}/JFK/LHR/2026-09-18",
+    # schedule: path-based with airport1, airport2, date, currency
+    f"https://api.flightapi.io/schedule/{API_KEY}/DEL/BLR/2026-09-18/INR",
+    # schedule: path-based with airport1, airport2, date, currency, mode
+    f"https://api.flightapi.io/schedule/{API_KEY}/DEL/BLR/2026-09-18/INR/departure",
+    # schedule: path-based with airport1, airport2, date, currency, mode=arrival
+    f"https://api.flightapi.io/schedule/{API_KEY}/DEL/BLR/2026-09-18/INR/arrival",
+    # schedule: path-based with airport1, airport2, date, currency, mode=schedule
+    f"https://api.flightapi.io/schedule/{API_KEY}/DEL/BLR/2026-09-18/INR/schedule",
+]
+
+lines = []
+for url in probes:
+    status, body = call(url)
+    short = url.replace(API_KEY, "<KEY>").replace("https://api.flightapi.io", "")[:100]
+    lines.append(f"=== {status} {short}")
+    lines.append(body[:800])
+    lines.append("")
+    print(status, short)
+
+with open("flightapi_endpoints.txt", "w", encoding="utf-8") as f:
+    f.write("\n".join(lines))
+print("done")

@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: real-time-airfare-index
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: FLIGHTAPI_API_KEY
+        sync: false
+      - key: FLIGHTAPI_STORE_MODE
+        value: direct
+      - key: COLLECTION_INTERVAL_HOURS
+        value: "3"

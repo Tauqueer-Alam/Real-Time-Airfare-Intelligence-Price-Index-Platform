@@ -1,0 +1,50 @@
+=== onewaytrip GET (classic) -> 404
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1"/><meta name="next-head-count" content="2"/><link rel="preload" href="/_next/static/7toVVQbaA4tFlEdcr-K6B/pages/_app.js" as="script"/><link rel="preload" href="/_next/s
+
+=== onewaytrip GET (origin/destination) -> 404
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1"/><meta name="next-head-count" content="2"/><link rel="preload" href="/_next/static/7toVVQbaA4tFlEdcr-K6B/pages/_app.js" as="script"/><link rel="preload" href="/_next/s
+
+=== tracksearch POST v2 -> 404
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot POST /tracksearch/6aaaf19a703b0cec8ded2156</pre>
+</body>
+</html>
+
+
+=== search POST -> 404
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot POST /search/6aaaf19a703b0cec8ded2156</pre>
+</body>
+</html>
+
+
+=== onewaytrip POST -> 404
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot POST /onewaytrip/6aaaf19a703b0cec8ded2156</pre>
+</body>
+</html>
+
+
+=== oneWayFlight GET -> 404
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1"/><meta name="next-head-count" content="2"/><link rel="preload" href="/_next/static/7toVVQbaA4tFlEdcr-K6B/pages/_app.js" as="script"/><link rel="preload" href="/_next/s
+
+=== air-fares GET -> 404
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1"/><meta name="next-head-count" content="2"/><link rel="preload" href="/_next/static/7toVVQbaA4tFlEdcr-K6B/pages/_app.js" as="script"/><link rel="preload" href="/_next/s

@@ -1,0 +1,48 @@
+"""Probe /airline and /schedule with exact documented param names + lowercase codes."""
+import urllib.request
+import urllib.error
+
+API_KEY = "6aaaf19a703b0cec8ded2156"
+
+
+def call(url):
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            return resp.status, resp.read().decode()[:4000]
+    except urllib.error.HTTPError as e:
+        return e.code, e.read().decode(errors="ignore")[:400]
+    except Exception as e:
+        return -1, repr(e)
+
+
+probes = [
+    # airline: lowercase airline_id, lowercase airports, date, currency
+    f"https://api.flightapi.io/airline/{API_KEY}?airline_id=aa&airport1=del&airport2=blr&date=2026-09-18&currency=inr",
+    f"https://api.flightapi.io/airline/{API_KEY}?airline_id=aa&airport1=jfk&airport2=lhr&date=2026-09-18&currency=usd",
+    # airline: lowercase airline_id, uppercase airports, date, currency
+    f"https://api.flightapi.io/airline/{API_KEY}?airline_id=aa&airport1=DEL&airport2=BLR&date=2026-09-18&currency=INR",
+    # airline: with number, lowercase airline_id
+    f"https://api.flightapi.io/airline/{API_KEY}?airline_id=aa&number=100&date=2026-09-18&currency=usd",
+    # schedule: lowercase airport1/airport2, departureDate, currency
+    f"https://api.flightapi.io/schedule/{API_KEY}?departureDate=2026-09-18&airport1=del&airport2=blr&currency=inr",
+    # schedule: uppercase airport1/airport2, departureDate, currency
+    f"https://api.flightapi.io/schedule/{API_KEY}?departureDate=2026-09-18&airport1=DEL&airport2=BLR&currency=INR",
+    # schedule: with mode=departure, lowercase
+    f"https://api.flightapi.io/schedule/{API_KEY}?departureDate=2026-09-18&airport1=del&airport2=blr&currency=inr&mode=departure",
+    # schedule: with mode=departure, uppercase
+    f"https://api.flightapi.io/schedule/{API_KEY}?departureDate=2026-09-18&airport1=DEL&airport2=BLR&currency=INR&mode=departure",
+]
+
+lines = []
+for url in probes:
+    status, body = call(url)
+    short = url.replace(API_KEY, "<KEY>").replace("https://api.flightapi.io", "")[:100]
+    lines.append(f"=== {status} {short}")
+    lines.append(body[:800])
+    lines.append("")
+    print(status, short)
+
+with open("flightapi_endpoints.txt", "w", encoding="utf-8") as f:
+    f.write("\n".join(lines))
+print("done")
