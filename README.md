@@ -32,6 +32,10 @@ database tables and generates the bundled airports, routes, flights, mock price
 snapshots, and synthetic history automatically. The operation is idempotent and
 safe across service restarts.
 
+The Render Blueprint limits the deployment demo to 250 routes so the service
+becomes usable quickly. Remove `DEMO_ROUTE_LIMIT` for the complete airport route
+graph.
+
 The deployed service exposes:
 
 ```text

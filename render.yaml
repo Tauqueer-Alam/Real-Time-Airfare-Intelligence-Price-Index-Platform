@@ -17,3 +17,5 @@ services:
         value: direct
       - key: COLLECTION_INTERVAL_HOURS
         value: "3"
+      - key: DEMO_ROUTE_LIMIT
+        value: "250"

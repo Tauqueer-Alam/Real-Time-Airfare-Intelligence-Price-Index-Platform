@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import random
+import os
 from datetime import datetime, timedelta, timezone
 
 from sqlalchemy.orm import Session
@@ -37,6 +38,8 @@ DEFAULT_MOCK_ROUTE_PAIRS = [
     ("DEL", "MAA"),
     ("HYD", "DEL"),
     ("DEL", "HYD"),
+    ("HYD", "BLR"),
+    ("BLR", "HYD"),
     ("CCU", "DEL"),
     ("DEL", "CCU"),
     ("DXB", "DEL"),
@@ -167,7 +170,15 @@ def seed_mock_route_data(force: bool = False) -> int:
         created_snapshots = 0
         seen_routes: set[tuple[int, int]] = set()
 
-        for source, destination in build_mock_route_pairs():
+        route_pairs = build_mock_route_pairs()
+        route_limit = os.getenv("DEMO_ROUTE_LIMIT")
+        if route_limit:
+            try:
+                route_pairs = route_pairs[: max(int(route_limit), len(DEFAULT_MOCK_ROUTE_PAIRS))]
+            except ValueError:
+                pass
+
+        for source, destination in route_pairs:
             origin = airport_map.get(source.upper())
             destination_airport = airport_map.get(destination.upper())
             if not origin or not destination_airport:
