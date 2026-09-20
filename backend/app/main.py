@@ -1,4 +1,5 @@
 import asyncio
+import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -18,6 +19,7 @@ from app.routes.flight_routes import router as flight_routes_router
 from app.routes.flights import router as flight_router
 from app.routes.search import router as search_router
 from app.services.collection_scheduler import run_scheduled_collection
+from app.startup import initialize_database
 
 
 class NoCacheStaticFiles(StaticFiles):
@@ -32,12 +34,17 @@ class NoCacheStaticFiles(StaticFiles):
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     stop_event = asyncio.Event()
+    seed_task = None
+    if "test_airfare.db" not in os.getenv("DATABASE_URL", "").lower():
+        seed_task = asyncio.create_task(asyncio.to_thread(initialize_database))
     collection_task = asyncio.create_task(run_scheduled_collection(stop_event))
     try:
         yield
     finally:
         stop_event.set()
         await collection_task
+        if seed_task is not None:
+            await seed_task
 
 
 app = FastAPI(

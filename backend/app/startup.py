@@ -35,9 +35,14 @@ def initialize_database() -> None:
         db.close()
 
 
+def create_database_schema() -> None:
+    """Create empty tables quickly so the web process can bind its port."""
+    Base.metadata.create_all(bind=engine)
+
+
 def main() -> None:
     logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO"))
-    initialize_database()
+    create_database_schema()
     os.execv(
         sys.executable,
         [
