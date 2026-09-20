@@ -149,9 +149,6 @@ def seed_mock_route_data(force: bool = False) -> int:
 
     db = SessionLocal()
     try:
-        if not force and db.query(Route).count() > 0:
-            return 0
-
         airport_map = _airport_lookup(db)
         for entry in AIRPORTS:
             code = entry["iata"].upper()
@@ -227,20 +224,30 @@ def seed_mock_route_data(force: bool = False) -> int:
                 else:
                     flight = existing_flight
 
-                for day_offset in range(0, 18):
-                    snapshot_time = datetime.now(timezone.utc) - timedelta(days=day_offset, hours=4)
-                    price = _mock_price_for_route(source, destination, flight_def["base_price"])
-                    if day_offset == 0:
-                        price *= random.uniform(0.97, 1.08)
-                    snapshot = PriceSnapshot(
-                        flight_id=flight.id,
-                        price=price,
-                        currency="INR",
-                        recorded_at=snapshot_time.replace(tzinfo=None),
-                        source="mock",
+                has_mock_snapshots = (
+                    db.query(PriceSnapshot.id)
+                    .filter(
+                        PriceSnapshot.flight_id == flight.id,
+                        PriceSnapshot.source == "mock",
                     )
-                    db.add(snapshot)
-                    created_snapshots += 1
+                    .first()
+                    is not None
+                )
+                if force or not has_mock_snapshots:
+                    for day_offset in range(0, 18):
+                        snapshot_time = datetime.now(timezone.utc) - timedelta(days=day_offset, hours=4)
+                        price = _mock_price_for_route(source, destination, flight_def["base_price"])
+                        if day_offset == 0:
+                            price *= random.uniform(0.97, 1.08)
+                        snapshot = PriceSnapshot(
+                            flight_id=flight.id,
+                            price=price,
+                            currency="INR",
+                            recorded_at=snapshot_time.replace(tzinfo=None),
+                            source="mock",
+                        )
+                        db.add(snapshot)
+                        created_snapshots += 1
 
         db.commit()
         return created_routes + created_snapshots
