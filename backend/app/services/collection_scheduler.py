@@ -138,7 +138,10 @@ def _generate_mock_events_for_routes(routes: list[tuple[str, str]]) -> list[Airf
     return events
 
 
-async def run_scheduled_collection(stop_event: asyncio.Event) -> None:
+async def run_scheduled_collection(
+    stop_event: asyncio.Event,
+    seed_task: asyncio.Task | None = None,
+) -> None:
     """Collect real airfare prices from FlightAPI.io until FastAPI signals shutdown."""
     interval = get_collection_interval_seconds()
     store_mode = os.getenv("FLIGHTAPI_STORE_MODE", "kafka").lower()
@@ -150,6 +153,9 @@ async def run_scheduled_collection(stop_event: asyncio.Event) -> None:
     logger.info(
         "Collecting airfare every %.1f hour(s)", interval / 3600.0
     )
+
+    if seed_task is not None:
+        await seed_task
 
     while not stop_event.is_set():
         try:
