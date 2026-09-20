@@ -34,17 +34,14 @@ class NoCacheStaticFiles(StaticFiles):
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     stop_event = asyncio.Event()
-    seed_task = None
     if "test_airfare.db" not in os.getenv("DATABASE_URL", "").lower():
-        seed_task = asyncio.create_task(asyncio.to_thread(initialize_database))
+        await asyncio.to_thread(initialize_database)
     collection_task = asyncio.create_task(run_scheduled_collection(stop_event))
     try:
         yield
     finally:
         stop_event.set()
         await collection_task
-        if seed_task is not None:
-            await seed_task
 
 
 app = FastAPI(
