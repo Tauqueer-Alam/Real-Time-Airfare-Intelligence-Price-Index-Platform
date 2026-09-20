@@ -1,3 +1,4 @@
+import os
 from typing import Literal
 
 from fastapi import APIRouter, Depends, Query
@@ -16,6 +17,7 @@ from app.services.cache import (
     cache_search_result,
     get_cached_search_result,
 )
+from app.services.mock_data import ensure_mock_route_data
 
 router = APIRouter(
     prefix="/api",
@@ -39,6 +41,8 @@ def search_flights(
     """
     normalized_source = source.strip().upper()
     normalized_destination = destination.strip().upper()
+    if os.getenv("DEMO_ON_DEMAND_ROUTES", "false").lower() == "true":
+        ensure_mock_route_data(normalized_source, normalized_destination)
     cache_key = build_search_cache_key(
         normalized_source,
         normalized_destination,

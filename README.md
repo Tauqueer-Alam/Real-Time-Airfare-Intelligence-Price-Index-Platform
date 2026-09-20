@@ -34,7 +34,8 @@ safe across service restarts.
 
 The Render Blueprint limits the deployment demo to 250 routes so the service
 becomes usable quickly. Remove `DEMO_ROUTE_LIMIT` for the complete airport route
-graph.
+graph. `DEMO_ON_DEMAND_ROUTES=true` also creates mock flights for any two
+catalog airports when a user searches that pair.
 
 The deployed service exposes:
 

@@ -1,3 +1,5 @@
+import os
+
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
@@ -8,6 +10,7 @@ from app.services.analytics import (
     calculate_price_index,
     get_route_price_history,
 )
+from app.services.mock_data import ensure_mock_route_data
 
 router = APIRouter(
     prefix="/api/analytics",
@@ -24,6 +27,8 @@ def get_price_index(
     """Compare today's average fare against the route's 30-day baseline."""
     normalized_source = source.strip().upper()
     normalized_destination = destination.strip().upper()
+    if os.getenv("DEMO_ON_DEMAND_ROUTES", "false").lower() == "true":
+        ensure_mock_route_data(normalized_source, normalized_destination)
     price_index_data = calculate_price_index(
         db,
         normalized_source,
@@ -57,6 +62,8 @@ def get_price_history(
     """
     normalized_source = source.strip().upper()
     normalized_destination = destination.strip().upper()
+    if os.getenv("DEMO_ON_DEMAND_ROUTES", "false").lower() == "true":
+        ensure_mock_route_data(normalized_source, normalized_destination)
     history_data = get_route_price_history(
         db,
         normalized_source,

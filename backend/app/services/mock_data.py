@@ -143,7 +143,10 @@ def _route_flights_for_pair(source: str, destination: str) -> list[dict]:
     return flights
 
 
-def seed_mock_route_data(force: bool = False) -> int:
+def seed_mock_route_data(
+    force: bool = False,
+    route_pairs: list[tuple[str, str]] | None = None,
+) -> int:
     """Ensure the database has a realistic route/flight snapshot dataset for local demo usage."""
     from app.database.connection import SessionLocal
 
@@ -167,13 +170,14 @@ def seed_mock_route_data(force: bool = False) -> int:
         created_snapshots = 0
         seen_routes: set[tuple[int, int]] = set()
 
-        route_pairs = build_mock_route_pairs()
-        route_limit = os.getenv("DEMO_ROUTE_LIMIT")
-        if route_limit:
-            try:
-                route_pairs = route_pairs[: max(int(route_limit), len(DEFAULT_MOCK_ROUTE_PAIRS))]
-            except ValueError:
-                pass
+        if route_pairs is None:
+            route_pairs = build_mock_route_pairs()
+            route_limit = os.getenv("DEMO_ROUTE_LIMIT")
+            if route_limit:
+                try:
+                    route_pairs = route_pairs[: max(int(route_limit), len(DEFAULT_MOCK_ROUTE_PAIRS))]
+                except ValueError:
+                    pass
 
         for source, destination in route_pairs:
             origin = airport_map.get(source.upper())
@@ -253,3 +257,11 @@ def seed_mock_route_data(force: bool = False) -> int:
         return created_routes + created_snapshots
     finally:
         db.close()
+
+
+def ensure_mock_route_data(source: str, destination: str) -> None:
+    """Create demo data for any two airports when on-demand mode is enabled."""
+    if source == destination:
+        return
+
+    seed_mock_route_data(route_pairs=[(source, destination)])

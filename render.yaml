@@ -19,3 +19,5 @@ services:
         value: "3"
       - key: DEMO_ROUTE_LIMIT
         value: "250"
+      - key: DEMO_ON_DEMAND_ROUTES
+        value: "true"
